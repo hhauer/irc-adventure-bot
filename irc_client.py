@@ -3,6 +3,7 @@
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 
+from irc_user import IRCUser
 
 class GameListener(irc.IRCClient):
     nickname = 'AdventureBot'
@@ -13,7 +14,17 @@ class GameListener(irc.IRCClient):
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
         self.join('informationsociety')
-        self.say('informationsociety', 'Muahahaha!')
+
+        self.users = {}
+
+    def privmsg(self, user, channel, message):
+        user = user.split('!', 1)[0]
+
+        if user not in self.users:
+            self.users[user] = IRCUser(user)
+
+        self.users[user].parse_line(message)
+        self.users[user].analyze()
 
 class GameListenerFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):

@@ -14,6 +14,7 @@ class IRCUser(object):
             print "{}: {}".format(k, v)
 
     def parse_line(self, line):
+        self.lines += 1
         tokens = line.split(' ')
 
         for k in tokens:

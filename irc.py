@@ -1,15 +1,26 @@
-# http://twistedmatrix.com/documents/current/words/examples/ircLogBot.py
-
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 
-from irc_user import IRCUser
+class User(object):
+    def __init__(self, username):
+        self.username = username
 
-class GameListener(irc.IRCClient):
+class Message(object):
+    def __init__(self, line):
+        #line = line.translate(string.maketrans('', ''), string.punctuation).lower()
+        self.tokens = line.lower().split()
+
+    def next_token(self):
+        try:
+            return self.tokens.pop(0)
+        except IndexError:
+            return None
+
+class Listener(irc.IRCClient):
     nickname = 'AdventureBot'
-    realname = 'omghai'
-    username = 'Bot'
-    lineRate = 1
+    realname = 'AdventureBot'
+    username = 'AdventureBot'
+    linerate = 1
 
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
@@ -21,14 +32,11 @@ class GameListener(irc.IRCClient):
         user = user.split('!', 1)[0]
 
         if user not in self.users:
-            self.users[user] = IRCUser(user)
+            self.users[user] = User(user)
 
-        self.users[user].parse_line(message)
-        self.users[user].analyze()
-
-class GameListenerFactory(protocol.ClientFactory):
+class ListenerFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):
-        return GameListener()
+        return Listener()
 
     def clientConnectionLost(self, connector, reason):
         connector.connect()
@@ -37,7 +45,9 @@ class GameListenerFactory(protocol.ClientFactory):
         print "connection failed: ", reason
         reactor.stop()
 
+# Test stub.
 if __name__ == '__main__':
-    f = GameListenerFactory()
+    f = ListenerFactory()
     reactor.connectTCP("irc.cat.pdx.edu", 6667, f)
     reactor.run()
+

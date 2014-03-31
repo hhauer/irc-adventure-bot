@@ -1,26 +1,25 @@
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 
+from game import Engine
+
 class User(object):
     def __init__(self, username):
         self.username = username
+        self.energy = 0.00
 
 class Message(object):
     def __init__(self, line):
         #line = line.translate(string.maketrans('', ''), string.punctuation).lower()
         self.tokens = line.lower().split()
 
-    def next_token(self):
-        try:
-            return self.tokens.pop(0)
-        except IndexError:
-            return None
-
 class Listener(irc.IRCClient):
     nickname = 'AdventureBot'
     realname = 'AdventureBot'
     username = 'AdventureBot'
     linerate = 1
+
+    engine = Engine()
 
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
@@ -33,6 +32,9 @@ class Listener(irc.IRCClient):
 
         if user not in self.users:
             self.users[user] = User(user)
+
+        energy = self.engine.process_message(self.users[user], Message(message))
+        self.msg(channel, "{}: that line was worth {} energy for a total of {}.".format(user, energy, self.users[user].energy))
 
 class ListenerFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):

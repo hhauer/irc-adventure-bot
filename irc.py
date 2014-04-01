@@ -16,8 +16,6 @@ class Message(object):
     dictionary = enchant.Dict() 
 
     def __init__(self, line):
-        #line = line.translate(string.maketrans('', ''), string.punctuation).lower()
-        #self.tokens = line.lower().split()
         self.tokens = [t[0] for t in self.tokenizer(line) if self.dictionary.check(t[0])] 
 
 class Listener(irc.IRCClient):

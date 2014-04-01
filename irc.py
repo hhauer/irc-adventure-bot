@@ -28,7 +28,8 @@ class Listener(irc.IRCClient):
 
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
-        self.join('informationsociety')
+        self.join('#informationsociety')
+	self.join('#adventurebot')
 
         self.users = {}
 
@@ -39,7 +40,7 @@ class Listener(irc.IRCClient):
             self.users[user] = User(user)
 
         energy = self.engine.process_message(self.users[user], Message(message))
-        self.msg(channel, "{}: that line was worth {} energy for a total of {}.".format(user, energy, self.users[user].energy))
+        self.msg('#adventurebot', "{} -- [{}] Line: {} | Total: {}".format(channel, user, energy, self.users[user].energy))
 
 class ListenerFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):

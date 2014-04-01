@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 class Engine(object):
     def __init__(self):
         self.words = {}
@@ -12,11 +14,32 @@ class Engine(object):
         return score
 
     def token_value(self, token):
+        energy = 25
+
         if token not in self.words:
-            self.words[token] = 25
+            self.words[token] = {
+                    'energy': energy,
+                    'last_used': datetime.now(),
+                    }
+        else:
+            scale = self.energy_scale(self.words[token]['last_used'], datetime.now())
+            energy = self.words[token]['energy'] * scale
 
-        if self.words[token] < 0.01:
-            return 0.01
+        if energy < 1:
+            energy = 1
 
-        self.words[token] *= 0.70
-        return self.words[token]
+        self.words[token]['energy'] = energy
+        return energy
+
+    def energy_scale(self, last, current):
+        delta = current - last
+
+        # 60s * 60m = 1hr
+        scale = delta.total_seconds() / (60 * 60)
+
+        if scale > 12:
+            return 12
+        elif scale < 0.05:
+            return 0.1
+        else:
+            return scale

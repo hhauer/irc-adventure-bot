@@ -1,6 +1,9 @@
 from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 
+import enchant
+from enchant import get_tokenizer
+
 from game import Engine
 
 class User(object):
@@ -9,9 +12,13 @@ class User(object):
         self.energy = 0.00
 
 class Message(object):
+    tokenizer = get_tokenizer()
+    dictionary = enchant.Dict() 
+
     def __init__(self, line):
         #line = line.translate(string.maketrans('', ''), string.punctuation).lower()
-        self.tokens = line.lower().split()
+        #self.tokens = line.lower().split()
+        self.tokens = [t[0] for t in self.tokenizer(line) if self.dictionary.check(t[0])] 
 
 class Listener(irc.IRCClient):
     nickname = 'AdventureBot'

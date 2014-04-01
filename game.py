@@ -1,5 +1,10 @@
 from datetime import datetime, timedelta
 
+
+# Logging
+import logging
+logger = logging.getLogger(__name__)
+
 class Engine(object):
     def __init__(self):
         self.words = {}

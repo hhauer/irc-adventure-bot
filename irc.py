@@ -6,6 +6,10 @@ from enchant.tokenize import get_tokenizer
 
 from game import Engine
 
+# Logging.
+import logging
+logger = logging.getLogger(__name__)
+
 class User(object):
     def __init__(self, username):
         self.username = username
@@ -13,10 +17,10 @@ class User(object):
 
 class Message(object):
     tokenizer = get_tokenizer()
-    dictionary = enchant.Dict() 
+    dictionary = enchant.Dict()
 
     def __init__(self, line):
-        self.tokens = [t[0] for t in self.tokenizer(line) if self.dictionary.check(t[0])] 
+        self.tokens = [t[0] for t in self.tokenizer(line) if self.dictionary.check(t[0])]
 
 class Listener(irc.IRCClient):
     nickname = 'AdventureBot'
@@ -52,10 +56,3 @@ class ListenerFactory(protocol.ClientFactory):
     def clientConnectionFailed(self, connector, reason):
         print "connection failed: ", reason
         reactor.stop()
-
-# Test stub.
-if __name__ == '__main__':
-    f = ListenerFactory()
-    reactor.connectTCP("irc.cat.pdx.edu", 6667, f)
-    reactor.run()
-

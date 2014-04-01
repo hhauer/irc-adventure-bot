@@ -2,7 +2,7 @@ from twisted.words.protocols import irc
 from twisted.internet import reactor, protocol
 
 import enchant
-from enchant import get_tokenizer
+from enchant.tokenize import get_tokenizer
 
 from game import Engine
 

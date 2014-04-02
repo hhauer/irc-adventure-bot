@@ -23,17 +23,26 @@ class Message(object):
         self.tokens = [t[0] for t in self.tokenizer(line) if self.dictionary.check(t[0])]
 
 class Listener(irc.IRCClient):
+    # Twisted IRC Values
     nickname = 'AdventureBot'
-    realname = 'AdventureBot'
-    username = 'AdventureBot'
+    realname = 'Adventure'
+    username = 'Adventure'
     linerate = 1
 
+    # AdventureBot Values
+    output_channel = '#adventurebot'
+    input_channels = ['#informationsociety']
     engine = Engine()
 
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
-        self.join('#informationsociety')
-	self.join('#adventurebot')
+
+        # Join listen channels.
+        for x in self.input_channels:
+            self.join(x)
+
+        # join output channel.
+        self.join(self.output_channel)
 
         self.users = {}
 
@@ -43,8 +52,14 @@ class Listener(irc.IRCClient):
         if user not in self.users:
             self.users[user] = User(user)
 
-        energy = self.engine.process_message(self.users[user], Message(message))
-        self.msg('#adventurebot', "{} -- [{}] Line: {} | Total: {}".format(channel, user, energy, self.users[user].energy))
+        if channel in self.input_channels:
+            energy = self.engine.process_message(self.users[user], Message(message))
+            self.msg(self.output_channel, "{} -- [{}] Line: {} | Total: {}".format(channel, user, energy, self.users[user].energy))
+        elif channel == self.nickname:
+            self.msg(self.output_channel, "Received private message from {}".format(user))
+        else:
+            self.msg(self.output_channel, "Input from invalid source.")
+
 
 class ListenerFactory(protocol.ClientFactory):
     def buildProtocol(self, addr):

@@ -3,7 +3,7 @@ import sys
 import logging
 import logging.config
 
-from twisted.internet import reactor
+from twisted.internet import reactor, ssl
 from irc import ListenerFactory
 
 # Configure logging.
@@ -63,5 +63,5 @@ logger = logging.getLogger(__name__)
 # Main function
 if __name__ == '__main__':
     f = ListenerFactory()
-    reactor.connectTCP("irc.cat.pdx.edu", 6667, f)
+    reactor.connectSSL("irc.cat.pdx.edu", 6697, f, ssl.ClientContextFactory())
     reactor.run()

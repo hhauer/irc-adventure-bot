@@ -44,6 +44,16 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'interpreter': {
+            'handlers': ['file_handler', 'console_handler'],
+            'level': 'WARN',
+            'propagate': False,
+        },
+        'commands': {
+            'handlers': ['file_handler', 'console_handler'],
+            'level': 'WARN',
+            'propagate': False,
+        },
     },
 }
 

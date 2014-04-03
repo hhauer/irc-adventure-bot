@@ -9,6 +9,7 @@ import enchant
 from enchant.tokenize import get_tokenizer
 
 from game import Engine
+from interpreter import Interpreter
 
 # Logging.
 import logging
@@ -73,10 +74,11 @@ class Listener(irc.IRCClient):
             energy = self.engine.process_message(self.users[user], Message(message))
             self.msg(self.output_channel, "{} -- [{}] Line: {} | Total: {}".format(channel, user, energy, self.users[user].energy))
         elif channel == self.nickname:
-            self.msg(self.output_channel, "Received private message from {}".format(user))
-        #else:
-            #self.msg(self.output_channel, "Stopping reactor.")
-            #self.quit("Attempting graceful quit.")
+            i = Interpreter(self, self.engine, self.users[user], message)
+            output = i.do_cmd()
+            
+            for l in output:
+                self.msg(user, l)
 
     def action(self, user, channel, message):
         yield

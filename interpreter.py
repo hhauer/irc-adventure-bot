@@ -22,20 +22,32 @@ class Interpreter(object):
                 self.tokens[1:]
             ))
 
-            self.output = self.commands[self.tokens[0]](
+            output = (self.commands[self.tokens[0]](
                     self.listener,
                     self.engine,
                     self.user,
                     self.tokens[1:]
-            )
+            ))
+
+            if isinstance(output, list):
+                for l in output:
+                    self.output.append(l)
+            else:
+                self.output.append(output)
         
+        except InvalidParametersException as e:
+            self.output.append("The format of your command was not as expected.")
+            self.output.append("Format: {}".format(e))
         except Exception as e:
             logger.debug("Exception in do_cmd: {}".format(e))
-            self.output = ['That command was not recognized.']
+            self.output.append('That command was not recognized.')
 
         return self.output
 
     commands = {
             'test': do_test,
+            'set_password': do_set_password,
+            'change_password': do_change_password,
+            'authenticate': do_authenticate,
     }
 

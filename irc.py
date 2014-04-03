@@ -10,15 +10,11 @@ from enchant.tokenize import get_tokenizer
 
 from game import Engine
 from interpreter import Interpreter
+from user import User
 
 # Logging.
 import logging
 logger = logging.getLogger(__name__)
-
-class User(object):
-    def __init__(self, username):
-        self.username = username
-        self.energy = 0.00
 
 class Message(object):
     tokenizer = get_tokenizer()

@@ -4,24 +4,21 @@
 import random
 
 class Markov(object):
-    def __init__(self, base, order = 2):
+    def __init__(self, words, order = 2):
         self.table = {}
         self.order = order
 
-        for i in range(len(base) - order):
-            try:
-                self.table[base[i:i + order]]
-            except KeyError:
-                self.table[base[i:i + order]] = []
+        for w in words:
+            for i in range(len(w) - order):
+                if w[i:i + order] not in self.table:
+                    self.table[w[i:i + order]] = []
 
-            self.table[base[i:i + order]] += base[i + order]
+                self.table[w[i:i + order]] += w[i + order]
 
-    def generate(self, start = None, max_length = 12, single_word = False):
-        if start == None:
-            s = random.choice(self.table.keys())
-        else:
-            s = start
+    def generate(self, start = None, max_length = 20):
+        s = start or random.choice(self.table.keys())
 
+        length = random.randrange(4, max_length)
         try:
             while len(s) < max_length:
                 choice = random.choice(self.table[s[-self.order:]])

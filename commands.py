@@ -45,8 +45,7 @@ def do_authenticate(listener, engine, user, tokens):
         return ["I was not able to validate your password."]
 
 def do_markov(listener, engine, user, tokens):
-    verify_parameters(tokens, 1, "markov <start> -- one or more characters to start with.")
-    markov = engine.markov.generate(tokens[0], len(tokens[0]) + 20)
+    markov = engine.markov.generate()
     logger.debug("{} generated a markov chain: {}".format(user.username, markov))
     return markov
 

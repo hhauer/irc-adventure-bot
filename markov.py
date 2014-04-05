@@ -9,6 +9,8 @@ class Markov(object):
         self.order = order
 
         for w in words:
+            w = w.encode('ascii', 'ignore')
+
             for i in range(len(w) - order):
                 if w[i:i + order] not in self.table:
                     self.table[w[i:i + order]] = []

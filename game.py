@@ -13,12 +13,8 @@ class Engine(object):
         self.words = {}
         self.markov = Markov(json.load(open('words.json', 'r')), 4)
 
-        logger.debug("Markov test output: {}".format(self.markov.generate()))
-
     def process_message(self, user, message):
         score = 0
-
-        logger.debug("Markov test output: %s", self.markov.generate())
 
         for t in message.tokens:
             score += self.token_value(t)

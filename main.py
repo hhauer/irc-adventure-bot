@@ -41,7 +41,7 @@ LOGGING = {
         },
         'game': {
             'handlers': ['file_handler', 'console_handler'],
-            'level': 'WARN',
+            'level': 'DEBUG',
             'propagate': False,
         },
         'interpreter': {

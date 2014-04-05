@@ -39,15 +39,15 @@ class Interpreter(object):
             self.output.append("The format of your command was not as expected.")
             self.output.append("Format: {}".format(e))
         except Exception as e:
-            logger.debug("Exception in do_cmd: {}".format(e))
+            logger.warn("Exception in do_cmd: {}".format(e))
             self.output.append('That command was not recognized.')
 
         return self.output
 
     commands = {
-            'test': do_test,
             'set_password': do_set_password,
             'change_password': do_change_password,
             'authenticate': do_authenticate,
+            'markov': do_markov,
     }
 

@@ -21,11 +21,8 @@ class Markov(object):
         length = random.randrange(4, max_length)
         try:
             while len(s) < max_length:
-                choice = random.choice(self.table[s[-self.order:]])
-                if choice == ' ' and single_word is True:
-                    return s
-                else:
-                    s += choice
+                s += random.choice(self.table[s[-self.order:]])
+
         except KeyError:
             pass
 

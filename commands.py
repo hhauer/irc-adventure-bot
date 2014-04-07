@@ -49,3 +49,25 @@ def do_markov(listener, engine, user, tokens):
     logger.debug("{} generated a markov chain: {}".format(user.username, markov))
     return markov
 
+def do_changelog(listener, engine, user, tokens):
+    change = None
+    with open('changelog.txt', 'r') as f:
+        change = [l for l in f]
+
+    return change
+
+def do_help(listener, engine, user, tokens):
+    output = None
+    if len(tokens) is 0:
+        with open('help/help.txt', 'r') as f:
+            output = [l for l in f]
+    else:
+        try:
+            helpfile = 'help/' + tokens[0]
+            logger.debug("Trying to open helpfile: %s", helpfile)
+            output = [l for l in f]
+        except e:
+            logger.debug("Exception loading help: {}".format(e))
+            output = "That helpfile was not found."
+
+    return output

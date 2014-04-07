@@ -49,5 +49,7 @@ class Interpreter(object):
             'change_password': do_change_password,
             'authenticate': do_authenticate,
             'markov': do_markov,
+            'changelog': do_changelog,
+            'help': do_help,
     }
 

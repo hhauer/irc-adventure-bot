@@ -1,0 +1,17 @@
+This is a helpfile.
+I am terrible at writing these!
+
+You can register your account once you have at least one line of input by using:
+register <password>
+
+Passwords are hashed using PBKDF2_SHA256 and a randomize (non-predictable) iteration count.
+
+Once you are registered, authenticate with:
+authenticate <password>
+
+You will lose your authentication if you change your nick.
+
+You can test markov generation with:
+markov
+
+Or see "help markov"

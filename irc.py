@@ -59,6 +59,8 @@ class Listener(irc.IRCClient):
 
     def joined(self, channel):
         logger.info("Joined channel: %s.", channel)
+        self.msg(channel, "Now listening on " + channel)
+        self.msg(channel, "Changelog at /msg adventurebot changelog.")
 
     def privmsg(self, user, channel, message):
         user = user.split('!', 1)[0]

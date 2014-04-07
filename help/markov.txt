@@ -1,0 +1,11 @@
+Markov chains are a methodology for generating text. A source model is fed to the markov
+chain generator and reduced to a mapping table of "previous three characters" and 
+"probable next character." A random selection across a probablistic distribution allows
+the generator to piece chains together until either no next character is available or
+a reasonable length limit is reached.
+
+Try it out with:
+markov
+
+The source text was:
+The Book of Wonder by Baron Edward John Moreton Drax Plunkett Dunsany

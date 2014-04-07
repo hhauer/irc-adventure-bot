@@ -1,5 +1,6 @@
 from passlib.context import CryptContext
 
+# Setting up passlib.
 pwd_context = CryptContext(
         schemes=["pbkdf2_sha256",],
         default="pbkdf2_sha256",
@@ -18,12 +19,27 @@ class PasswordIncorrectException(Exception):
 class PasswordChangeFailureException(Exception):
     pass
 
-class User(object):
-    def __init__(self, username):
-        self.username = username
-        self.energy = 0.00
+# Setting up peewee.
+from peewee import *
+db = SqliteDatabase('db.sqlite')
+db.connect()
 
-        self.password = None
+class CustomModel(Model):
+    class Meta:
+        database = db
+
+# AdventureBot Models
+class User(CustomModel):
+    username = CharField()
+    password = CharField()
+    email = CharField()
+
+    energy = DoubleField()
+
+    def __init__(self, *args, **kwargs):
+        super(User, self).__init__(self, *args, **kwargs)
+
+        # Auth is not stored to the DB.
         self.auth = False
 
     def set_password(self, password):
@@ -46,3 +62,13 @@ class User(object):
         else:
             self.auth = False
             raise PasswordIncorrectException()
+
+class Word(CustomModel):
+    word = CharField()
+    last_used = DateTimeField()
+    times = IntegerField()
+
+# If run directly, create our tables.
+if __name__ == '__main__':
+    User.create_table(True)
+    Word.create_table(True)

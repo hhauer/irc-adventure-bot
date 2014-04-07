@@ -10,7 +10,7 @@ from enchant.tokenize import get_tokenizer
 
 from game import Engine
 from interpreter import Interpreter
-from user import User
+from models import User
 
 # Logging.
 import logging
@@ -64,7 +64,10 @@ class Listener(irc.IRCClient):
         user = user.split('!', 1)[0]
 
         if user not in self.users:
-            self.users[user] = User(user)
+            try:
+                self.users[user] = User.get(username=user)
+            except User.DoesNotExist:
+                self.users[user] = User.create(username=user)
 
         if channel in self.input_channels:
             energy = self.engine.process_message(self.users[user], Message(message))
@@ -76,15 +79,21 @@ class Listener(irc.IRCClient):
             for l in output:
                 self.msg(user, l)
 
+        # Commit any DB changes incurred.
+        self.users[user].save()
+
     def action(self, user, channel, message):
         yield
 
     # IRC Callbacks
     def irc_NICK(self, prefix, params):
-        """Called when an IRC user changes their nickname."""
-        #old_nick = prefix.split('!')[0]
-        #new_nick = params[0]
-        #self.logger.log("%s is now known as %s" % (old_nick, new_nick))
+        old_nick = prefix.split('!')[0]
+        new_nick = params[0]
+        
+        if old_nick in self.users:
+            self.users[old_nick].auth = False
+            logger.info("%s is now known as %s. Auth status is %s.", 
+                old_nick, new_nick, self.users[old_nick].auth)
 
 
 class ListenerFactory(protocol.ClientFactory):

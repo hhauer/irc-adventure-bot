@@ -19,12 +19,15 @@ def do_set_password(listener, engine, user, tokens):
 
     try:
         user.set_password(tokens[0])
-        return ["Your password has been set."]
+        return ["Your password has been set. You are now registered."]
     except PasswordAlreadySetException:
         return ["You already have a password set."]
 
 def do_change_password(listener, engine, user, tokens):
     verify_parameters(tokens, 2, "change_password <old_password> <new_password>")
+
+    if user.auth is False:
+        return "You must first authenticate before you may change your password."
 
     try:
         user.change_password(tokens[0], tokens[1])
@@ -38,8 +41,12 @@ def do_change_password(listener, engine, user, tokens):
 def do_authenticate(listener, engine, user, tokens):
     verify_parameters(tokens, 1, "authenticate <password>")
 
+    if user.auth is True:
+        return "You are already authenticated."
+
     try:
         user.verify_password(tokens[0])
+        user.auth = True
         return ["You are now authenticated."]
     except PasswordIncorrectException:
         return ["I was not able to validate your password."]

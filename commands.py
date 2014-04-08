@@ -71,3 +71,13 @@ def do_help(listener, engine, user, tokens):
             output = "That helpfile was not found."
 
     return output
+
+def do_adventure(listener, engine, user, tokens):
+    if len(tokens) is 0:
+        return ["Please select a location to adventure:"] + [l for l in engine.zones.keys()]
+
+    try:
+        (level, mob) = engine.zones[tokens[0]].pick_mob()
+        return "You encounter a level {} monster! The {} snarls menacingly.".format(level, mob)
+    except KeyError:
+        return "That is not a valid destination to adventure in."

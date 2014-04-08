@@ -3,6 +3,7 @@ import json
 
 from markov import Markov
 from models import Word
+from zones import Zone
 
 # Logging
 import logging
@@ -12,6 +13,14 @@ class Engine(object):
     def __init__(self):
         self.words = {}
         self.markov = Markov(json.load(open('words.json', 'r')), 4)
+        self.zones = {}
+
+        zones = json.load(open('zones/index', 'r'))
+
+        for zone_code in zones:
+            zone_code = zone_code.encode('ascii', 'ignore')
+            self.zones[zone_code] = Zone()
+            self.zones[zone_code].load(zone_code)
 
     def process_message(self, user, message):
         score = 0

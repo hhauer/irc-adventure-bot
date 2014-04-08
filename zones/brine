@@ -1,0 +1,10 @@
+{
+    "code":"brine",
+    "level":3,
+    "mobs":[
+        "Brine Shrimp",
+        "Brine Sodium",
+        "Brine Chloride"
+    ],
+    "name":"The Briny Deeps"
+}

@@ -1,2 +1,4 @@
 4/7/2014 - Added changelog reporting for the curious.
 4/7/2014 - Added a help system.
+4/7/2014 - You can now adventure in a few locations. Adventuring is fun, but
+pointless!

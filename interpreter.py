@@ -51,5 +51,6 @@ class Interpreter(object):
             'markov': do_markov,
             'changelog': do_changelog,
             'help': do_help,
+            'adventure': do_adventure,
     }
 

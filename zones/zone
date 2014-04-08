@@ -1,0 +1,14 @@
+{
+    "code":"zone",
+    "level":1,
+    "mobs":[
+        "A mouse",
+        "A mice",
+        "Some mouse",
+        "Some mice",
+        "Meese?",
+        "Moose? ...",
+        "Maps? Now it's not even making sense anymore."
+    ],
+    "name":"Obligatory Den Of Easily Overcome Mice"
+}

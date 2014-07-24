@@ -31,10 +31,10 @@ class CustomModel(Model):
 # AdventureBot Models
 class User(CustomModel):
     username = CharField()
-    password = CharField()
-    email = CharField()
+    password = CharField(null=True)
+    email = CharField(null=True)
 
-    energy = DoubleField()
+    energy = DoubleField(default=0)
 
     def __init__(self, *args, **kwargs):
         super(User, self).__init__(self, *args, **kwargs)

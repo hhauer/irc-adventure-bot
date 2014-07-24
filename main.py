@@ -1,10 +1,14 @@
 import sys
+import yaml
 
 import logging
 import logging.config
 
 from twisted.internet import reactor, ssl
 from irc import ListenerFactory
+from yapsy.PluginManager import PluginManager
+
+from plugins import UserInput, INPUT_PATTERN_REGISTRY
 
 # Configure logging.
 LOGGING = {
@@ -60,8 +64,26 @@ LOGGING = {
 logging.config.dictConfig(LOGGING)
 logger = logging.getLogger(__name__)
 
+# Prepare the plugin system
+manager = PluginManager()
+manager.setPluginPlaces(["plugins"])
+manager.setCategoriesFilter({
+    "Input": UserInput,
+})
+
+manager.collectPlugins()
+
+for plugin in manager.getPluginsOfCategory("Input"):
+    plugin.plugin_object.register_plugin(pattern_registry)
+
+# Prepare the global settings object.
+with open('settings.yaml', 'r') as f:
+    GLOBAL_SETTINGS = yaml.load(f)
+
 # Main function
 if __name__ == '__main__':
-    f = ListenerFactory()
-    reactor.connectSSL("irc.cat.pdx.edu", 6697, f, ssl.ClientContextFactory())
+    f = ListenerFactory(GLOBAL_SETTINGS["server"])
+
+    reactor.connectSSL(GLOBAL_SETTINGS["server"]["host"], GLOBAL_SETTINGS["server"]["port"], f, ssl.ClientContextFactory())
+    
     reactor.run()

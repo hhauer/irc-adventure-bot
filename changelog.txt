@@ -1,4 +1,5 @@
 4/7/2014 - Added changelog reporting for the curious.
 4/7/2014 - Added a help system.
-4/7/2014 - You can now adventure in a few locations. Adventuring is fun, but
-pointless!
+4/7/2014 - You can now adventure in a few locations. Adventuring is fun, but pointless!
+7/24/2014 - Added a plugin system that does absolutely nothing!
+7/24/2014 - Moved basic configuration out of the code and into a settings file.

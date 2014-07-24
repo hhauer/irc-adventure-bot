@@ -25,18 +25,23 @@ class Message(object):
 
 class Listener(irc.IRCClient):
     # Twisted IRC Values
-    nickname = 'AdventureBot'
-    realname = 'Adventure'
-    username = 'Adventure'
+    #nickname = 'AdventureBot'
+    #realname = 'Adventure'
+    #username = 'Adventure'
     linerate = 1
 
     # AdventureBot Values
     output_channel = '#adventurebot'
-    input_channels = ['#informationsociety']
+    #input_channels = ['#informationsociety']
     engine = Engine()
 
-    def __init__(self):
+    def __init__(self, options):
         self.users = {}
+        self.nickname = options["nickname"]
+        self.realname = options["realname"]
+        self.username = options["username"]
+
+        self.input_channels = options["channels"]
 
     def connectionMade(self):
         irc.IRCClient.connectionMade(self)
@@ -99,8 +104,11 @@ class Listener(irc.IRCClient):
 
 
 class ListenerFactory(protocol.ClientFactory):
+    def __init__(self, server_settings):
+        self.settings = server_settings
+
     def buildProtocol(self, addr):
-        return Listener()
+        return Listener(self.settings)
 
     def clientConnectionLost(self, connector, reason):
         r = reason.check(ConnectionDone)

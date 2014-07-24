@@ -1,0 +1,8 @@
+server:
+  channels:
+  - '#informationsociety'
+  host: irc.cat.pdx.edu
+  port: 6697
+  nickname: AdventureBot
+  username: Adventure
+  realname: Adventure

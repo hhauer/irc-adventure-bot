@@ -74,7 +74,7 @@ manager.setCategoriesFilter({
 manager.collectPlugins()
 
 for plugin in manager.getPluginsOfCategory("Input"):
-    plugin.plugin_object.register_plugin(pattern_registry)
+    plugin.plugin_object.register_plugin(INPUT_PATTERN_REGISTRY)
 
 # Prepare the global settings object.
 with open('settings.yaml', 'r') as f:

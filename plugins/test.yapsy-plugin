@@ -1,0 +1,9 @@
+[Core]
+Name = Test Plugin
+Module = test
+
+[Documentation]
+Author = Harley Hauer
+Version = 0.1
+Website = http://dosciencetoit.com
+Description = A test plugin.

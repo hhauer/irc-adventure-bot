@@ -12,6 +12,8 @@ from game import Engine
 from interpreter import Interpreter
 from models import User
 
+from plugins import handle_input
+
 # Logging.
 import logging
 logger = logging.getLogger(__name__)
@@ -79,6 +81,7 @@ class Listener(irc.IRCClient):
         if channel in self.input_channels:
             energy = self.engine.process_message(self.users[user], Message(message))
             self.msg(self.output_channel, "{} -- [{}] Line: {} | Total: {}".format(channel, user, energy, self.users[user].energy))
+            handle_input(message)
         elif channel == self.nickname:
             i = Interpreter(self, self.engine, self.users[user], message)
             output = i.do_cmd()
